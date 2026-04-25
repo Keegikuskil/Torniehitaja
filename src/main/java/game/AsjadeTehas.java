@@ -19,7 +19,7 @@ public class AsjadeTehas implements EntityFactory {
         füüsika.setBodyType(BodyType.DYNAMIC);
         return FXGL.entityBuilder(info)
                 .type(EntityType.KORRUS)
-                .viewWithBBox(new Rectangle(40, 40, Color.BLUE))
+                .viewWithBBox(new Rectangle(150, 150, Color.BLUE))
                 .with(füüsika)
                 .with(new KorruseKomponent())
                 .collidable()

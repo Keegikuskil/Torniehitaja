@@ -13,6 +13,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class TorniehitajaMang extends GameApplication {
     private Entity praeguneKorrus;
+    private int korrusteArv = 0;
 
     @Override
     protected void initSettings(GameSettings seaded) {
@@ -30,6 +31,8 @@ public class TorniehitajaMang extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new AsjadeTehas());
+
+        //getGameScene().getViewport().setX(0);
         teeMaa();
         teeKorrus();
     }
@@ -44,7 +47,7 @@ public class TorniehitajaMang extends GameApplication {
                     praeguneKorrus = null;
                     getGameTimer().runOnceAfter(() -> {
                         teeKorrus();
-                    },javafx.util.Duration.seconds(0.4));
+                    },javafx.util.Duration.seconds(0.8));
                 }
             }
         }, KeyCode.SPACE);
@@ -55,7 +58,20 @@ public class TorniehitajaMang extends GameApplication {
     }
 
     private void teeKorrus()    {
-        praeguneKorrus = spawn("KORRUS", 300, 100);
+        praeguneKorrus = spawn("KORRUS", 235, 100);
+        //TODO: KAAMERA võiks liikuda kaasa alates mingist punktist
+
+        /*
+        int maaY = 750;
+        int korruseKõrgus = 150;
+        int korruseY = maaY - korruseKõrgus - 300 - (korrusteArv * korruseKõrgus);
+
+        praeguneKorrus = spawn("KORRUS", 235, korruseY);
+
+        double kaameraY = korruseY;
+        getGameScene().getViewport().setY(kaameraY);
+        korrusteArv++;
+         */
     }
 
     private void teeMaa()   {

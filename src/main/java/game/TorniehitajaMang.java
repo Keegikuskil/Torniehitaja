@@ -42,6 +42,9 @@ public class TorniehitajaMang extends GameApplication {
                 if (praeguneKorrus != null) {
                     praeguneKorrus.getComponent(KorruseKomponent.class).kukuta();
                     praeguneKorrus = null;
+                    getGameTimer().runOnceAfter(() -> {
+                        teeKorrus();
+                    },javafx.util.Duration.seconds(0.4));
                 }
             }
         }, KeyCode.SPACE);

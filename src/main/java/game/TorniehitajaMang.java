@@ -27,6 +27,10 @@ public class TorniehitajaMang extends GameApplication {
         teeKorrus();
     }
 
+    @Override
+    protected void initInput() {
+    }
+
     public static void main(String[] args)  {
         launch(args);
     }

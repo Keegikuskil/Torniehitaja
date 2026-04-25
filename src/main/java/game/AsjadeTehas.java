@@ -17,11 +17,11 @@ public class AsjadeTehas implements EntityFactory {
     public Entity uusKorrus(SpawnData info) {
         PhysicsComponent füüsika = new PhysicsComponent();
         füüsika.setBodyType(BodyType.DYNAMIC);
-
         return FXGL.entityBuilder(info)
                 .type(EntityType.KORRUS)
                 .viewWithBBox(new Rectangle(40, 40, Color.BLUE))
                 .with(füüsika)
+                .with(new KorruseKomponent())
                 .collidable()
                 .build();
     }

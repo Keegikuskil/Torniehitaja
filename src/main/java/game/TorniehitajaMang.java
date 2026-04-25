@@ -3,11 +3,16 @@ package game;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import javafx.scene.input.KeyCode;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class TorniehitajaMang extends GameApplication {
+    private Entity praeguneKorrus;
 
     @Override
     protected void initSettings(GameSettings seaded) {
@@ -17,6 +22,8 @@ public class TorniehitajaMang extends GameApplication {
         seaded.setManualResizeEnabled(true);
         seaded.setPreserveResizeRatio(true);
         seaded.setScaleAffectedOnResize(true);
+        seaded.setVersion("0.1");
+        seaded.setDeveloperMenuEnabled(true);
 
     }
 
@@ -29,6 +36,15 @@ public class TorniehitajaMang extends GameApplication {
 
     @Override
     protected void initInput() {
+        getInput().addAction(new UserAction("kukuta") {
+            @Override
+            protected void onActionBegin() {
+                if (praeguneKorrus != null) {
+                    praeguneKorrus.getComponent(KorruseKomponent.class).kukuta();
+                    praeguneKorrus = null;
+                }
+            }
+        }, KeyCode.SPACE);
     }
 
     public static void main(String[] args)  {
@@ -36,7 +52,7 @@ public class TorniehitajaMang extends GameApplication {
     }
 
     private void teeKorrus()    {
-        spawn("KORRUS", 300, 100);
+        praeguneKorrus = spawn("KORRUS", 300, 100);
     }
 
     private void teeMaa()   {

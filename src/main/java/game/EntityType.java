@@ -1,5 +1,5 @@
 package game;
 
 public enum EntityType {
-    KORRUS
+    KORRUS, MAA
 }

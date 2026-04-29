@@ -30,6 +30,16 @@ public class KorruseKomponent extends Component {
         } else {
             füüsika.setLinearVelocity(0, füüsika.getVelocityY());
         }
+        // kui tahaksime teha pendlina, ss l*l - dx*dx = y*y oleks koordinaatide saamine
+        //if (!(x==xo))
+            //if x > xo
+                // dx = x - xo
+                // y = (l*l - dx*dx)ruutjuur
+            //else if x < xo
+                // dx = xo - x
+                // y = (l*l - dx*dx)ruutjuur
+        //else if (x==xo)
+            //y = l
     }
 
 

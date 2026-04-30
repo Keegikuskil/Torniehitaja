@@ -9,6 +9,9 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import javafx.scene.input.KeyCode;
 
+
+import java.util.Random;
+
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class TorniehitajaMang extends GameApplication {
@@ -65,7 +68,10 @@ public class TorniehitajaMang extends GameApplication {
     private void teeKorrus()    {
         // praeguneKorrus = spawn("KORRUS", 235, 100);
         //TODO: KAAMERA võiks liikuda kaasa alates mingist punktist
+        //TODO: KAAMERA liigub isegi siis kui korrus maandub üleeelmisele
 
+        Random rdm = new Random();
+        int juhuarv = rdm.nextInt(0, 450);
 
         int maaY = 750;
         int korruseKõrgus = 150;
@@ -76,7 +82,7 @@ public class TorniehitajaMang extends GameApplication {
         eelmineKorrus = praeguneKorrus;
         if (korrusteArv < 3) {
             korruseY = 50;
-            praeguneKorrus = spawn("KORRUS", 235, korruseY);
+            praeguneKorrus = spawn("KORRUS", juhuarv, korruseY);
             targetKaameraY = 0;
             // getGameScene().getViewport().setY(kaameraY);
         }
@@ -89,7 +95,7 @@ public class TorniehitajaMang extends GameApplication {
 
         if (korrusteArv >= 3) {
             korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus) - vahe;
-            praeguneKorrus = spawn("KORRUS", 235, korruseY);
+            praeguneKorrus = spawn("KORRUS", juhuarv, korruseY);
             double vaheY = kaameraY - korruseY + 50;
             targetKaameraY = korruseY - 50; // tweak this offset
             // getGameScene().getViewport().setY(kaameraY);

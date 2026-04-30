@@ -34,7 +34,7 @@ public class TorniehitajaMang extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new AsjadeTehas());
-        getGameScene().getViewport().setY(-300);
+        getGameScene().getViewport().setY(0);
         getGameScene().getViewport().setLazy(true);
 
         //getGameScene().getViewport().setX(0);

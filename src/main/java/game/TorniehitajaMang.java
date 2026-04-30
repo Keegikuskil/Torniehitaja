@@ -14,6 +14,9 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 public class TorniehitajaMang extends GameApplication {
     private Entity praeguneKorrus;
     private int korrusteArv = 0;
+    private double targetKaameraY = 0;
+    private int skoor = 0;
+    private Entity eelmineKorrus;
 
     @Override
     protected void initSettings(GameSettings seaded) {
@@ -67,13 +70,15 @@ public class TorniehitajaMang extends GameApplication {
         int maaY = 750;
         int korruseKõrgus = 150;
         double korruseY = 50;
-        double kaameraY = 300;
+        // double targetKaameraY = 0;
+        double kaameraY = 0;
         int vahe = 250;
+        eelmineKorrus = praeguneKorrus;
         if (korrusteArv < 3) {
             korruseY = 50;
             praeguneKorrus = spawn("KORRUS", 235, korruseY);
-            kaameraY = 0;
-            getGameScene().getViewport().setY(kaameraY);
+            targetKaameraY = 0;
+            // getGameScene().getViewport().setY(kaameraY);
         }
         // int korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus);
 
@@ -85,14 +90,33 @@ public class TorniehitajaMang extends GameApplication {
         if (korrusteArv >= 3) {
             korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus) - vahe;
             praeguneKorrus = spawn("KORRUS", 235, korruseY);
-            kaameraY = korruseY - 50; // tweak this offset
-            getGameScene().getViewport().setY(kaameraY);
+            double vaheY = kaameraY - korruseY + 50;
+            targetKaameraY = korruseY - 50; // tweak this offset
+            // getGameScene().getViewport().setY(kaameraY);
             // getGameScene().getViewport().setY(kaameraY);
         }
         korrusteArv++;
     }
 
+    @Override
+    protected void onUpdate(double tpf) {
+
+        double currentY = getGameScene().getViewport().getY();
+
+        // only moves if needed
+        double diff = targetKaameraY - currentY;
+
+        if (Math.abs(diff) > 1) {
+            double smoothY = currentY + diff * 0.1;
+            getGameScene().getViewport().setY(smoothY);
+        }
+    }
+
     private void teeMaa()   {
         spawn("MAA", 0, 800 - 50);
+    }
+
+    private void endGame() {
+        System.out.println("GAME OVER");
     }
 }

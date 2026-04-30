@@ -31,6 +31,8 @@ public class TorniehitajaMang extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new AsjadeTehas());
+        getGameScene().getViewport().setY(-300);
+        getGameScene().getViewport().setLazy(true);
 
         //getGameScene().getViewport().setX(0);
         teeMaa();
@@ -58,20 +60,36 @@ public class TorniehitajaMang extends GameApplication {
     }
 
     private void teeKorrus()    {
-        praeguneKorrus = spawn("KORRUS", 235, 100);
+        // praeguneKorrus = spawn("KORRUS", 235, 100);
         //TODO: KAAMERA võiks liikuda kaasa alates mingist punktist
 
-        /*
+
         int maaY = 750;
         int korruseKõrgus = 150;
-        int korruseY = maaY - korruseKõrgus - 300 - (korrusteArv * korruseKõrgus);
+        double korruseY = 50;
+        double kaameraY = 300;
+        int vahe = 250;
+        if (korrusteArv < 3) {
+            korruseY = 50;
+            praeguneKorrus = spawn("KORRUS", 235, korruseY);
+            kaameraY = 0;
+            getGameScene().getViewport().setY(kaameraY);
+        }
+        // int korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus);
 
-        praeguneKorrus = spawn("KORRUS", 235, korruseY);
+        // praeguneKorrus = spawn("KORRUS", 235, korruseY);
 
-        double kaameraY = korruseY;
-        getGameScene().getViewport().setY(kaameraY);
+        // double kaameraY = korruseY;
+        // korrusteArv++;
+
+        if (korrusteArv >= 3) {
+            korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus) - vahe;
+            praeguneKorrus = spawn("KORRUS", 235, korruseY);
+            kaameraY = korruseY - 50; // tweak this offset
+            getGameScene().getViewport().setY(kaameraY);
+            // getGameScene().getViewport().setY(kaameraY);
+        }
         korrusteArv++;
-         */
     }
 
     private void teeMaa()   {

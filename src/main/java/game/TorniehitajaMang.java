@@ -78,7 +78,7 @@ public class TorniehitajaMang extends GameApplication {
         //int juhuarv = rdm.nextInt(0, 450);
 
         int maaY = 750;
-        int korruseKõrgus = 150;
+        int korruseKõrgus = 150; 
         double korruseY = 50;
         int vahe = 250;
         eelmineKorrus = praeguneKorrus;

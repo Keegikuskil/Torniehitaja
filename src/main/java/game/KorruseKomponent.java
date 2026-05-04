@@ -19,7 +19,7 @@ public class KorruseKomponent extends Component {
 
     public void onUpdate(double tpf) {
         PhysicsComponent füüsika = entity.getComponent(PhysicsComponent.class);
-        double xkiirus = -raadiusX * kiirus * Math.sin(nurk);
+        double xkiirus;
         if (füüsika.getBody().getGravityScale() == 0f) {
 
             nurk += tpf * kiirus;

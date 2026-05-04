@@ -8,6 +8,7 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 
 import java.util.Random;
@@ -47,8 +48,14 @@ public class TorniehitajaMang extends GameApplication {
 
     @Override
     protected void initInput() {
-        getInput().addAction(new UserAction("kukuta") {
-            @Override
+        getInput().addAction(teeKukutamiseNupp("kukuta_space"), KeyCode.SPACE);
+        getInput().addAction(teeKukutamiseNupp("kukuta_s"), KeyCode.S);
+        getInput().addAction(teeKukutamiseNupp("kukuta_alla"), KeyCode.DOWN);
+        getInput().addAction(teeKukutamiseNupp("kukuta_hiir"), MouseButton.PRIMARY);
+    }
+
+    private UserAction teeKukutamiseNupp(String nimi) {
+        return new UserAction(nimi) {
             protected void onActionBegin() {
                 if (praeguneKorrus != null) {
                     praeguneKorrus.getComponent(KorruseKomponent.class).kukuta();
@@ -58,8 +65,8 @@ public class TorniehitajaMang extends GameApplication {
                     },javafx.util.Duration.seconds(0.8));
                 }
             }
-        }, KeyCode.SPACE);
-    }
+        };
+        }
 
     public static void main(String[] args)  {
         launch(args);

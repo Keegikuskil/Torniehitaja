@@ -4,8 +4,10 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 
 public class KorruseKomponent extends Component {
-    private double kiirus = 250;
-    private int suund = 1;
+    private double kiirus = 2;
+    private double nurk = 0;
+    private double raadiusX = 235;
+    private double raadiusY = 175;
 
     @Override
     public void onAdded() {
@@ -16,30 +18,20 @@ public class KorruseKomponent extends Component {
     }
 
     public void onUpdate(double tpf) {
-
-        //TODO: Tegelikult kraana nii ei tööta, originaalis ta kõigub kraana otsas.
         PhysicsComponent füüsika = entity.getComponent(PhysicsComponent.class);
+        double xkiirus = -raadiusX * kiirus * Math.sin(nurk);
         if (füüsika.getBody().getGravityScale() == 0f) {
-            füüsika.setLinearVelocity(kiirus * suund, 0);
 
-            if (entity.getX() >= 620 - 150) {
-                suund = -1;
-            } else if (entity.getX() <= 0) {
-                suund = 1;
-            }
+            nurk += tpf * kiirus;
+
+            xkiirus = -raadiusX * kiirus * Math.sin(nurk);
+            double ykiirus = raadiusY * kiirus * Math.cos(nurk);
+
+            füüsika.setLinearVelocity(xkiirus, ykiirus);
+
         } else {
             füüsika.setLinearVelocity(0, füüsika.getVelocityY());
         }
-        // kui tahaksime teha pendlina, ss l*l - dx*dx = y*y oleks koordinaatide saamine
-        //if (!(x==xo))
-            //if x > xo
-                // dx = x - xo
-                // y = (l*l - dx*dx)ruutjuur
-            //else if x < xo
-                // dx = xo - x
-                // y = (l*l - dx*dx)ruutjuur
-        //else if (x==xo)
-            //y = l
     }
 
 

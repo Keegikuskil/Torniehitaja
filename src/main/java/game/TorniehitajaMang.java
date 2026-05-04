@@ -73,40 +73,24 @@ public class TorniehitajaMang extends GameApplication {
     }
 
     private void teeKorrus()    {
-        // praeguneKorrus = spawn("KORRUS", 235, 100);
-        //TODO: KAAMERA võiks liikuda kaasa alates mingist punktist
-        //TODO: KAAMERA liigub isegi siis kui korrus maandub üleeelmisele
 
-        Random rdm = new Random();
-        int juhuarv = rdm.nextInt(0, 450);
+        //Random rdm = new Random();
+        //int juhuarv = rdm.nextInt(0, 450);
 
         int maaY = 750;
         int korruseKõrgus = 150;
         double korruseY = 50;
-        // double targetKaameraY = 0;
-        double kaameraY = 0;
         int vahe = 250;
         eelmineKorrus = praeguneKorrus;
         if (korrusteArv < 3) {
-            korruseY = 50;
-            praeguneKorrus = spawn("KORRUS", juhuarv, korruseY);
+            praeguneKorrus = spawn("KORRUS", 470, korruseY);
             targetKaameraY = 0;
-            // getGameScene().getViewport().setY(kaameraY);
         }
-        // int korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus);
-
-        // praeguneKorrus = spawn("KORRUS", 235, korruseY);
-
-        // double kaameraY = korruseY;
-        // korrusteArv++;
 
         if (korrusteArv >= 3) {
             korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus) - vahe;
-            praeguneKorrus = spawn("KORRUS", juhuarv, korruseY);
-            double vaheY = kaameraY - korruseY + 50;
-            targetKaameraY = korruseY - 50; // tweak this offset
-            // getGameScene().getViewport().setY(kaameraY);
-            // getGameScene().getViewport().setY(kaameraY);
+            praeguneKorrus = spawn("KORRUS", 470, korruseY);
+            targetKaameraY = korruseY - 50;
         }
         korrusteArv++;
     }
@@ -115,8 +99,6 @@ public class TorniehitajaMang extends GameApplication {
     protected void onUpdate(double tpf) {
 
         double currentY = getGameScene().getViewport().getY();
-
-        // only moves if needed
         double diff = targetKaameraY - currentY;
 
         if (Math.abs(diff) > 1) {

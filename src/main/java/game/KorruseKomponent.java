@@ -3,9 +3,12 @@ package game;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 
+import java.util.Random;
+
 public class KorruseKomponent extends Component {
-    private double kiirus = 300;
-    private int suund = 1;
+    private Random rdm = new Random();
+    private double kiirus = rdm.nextInt(250, 600);
+    private int suund = (Math.random() < 0.5) ? 1 : -1;
 
     @Override
     public void onAdded() {
@@ -27,7 +30,7 @@ public class KorruseKomponent extends Component {
             }
 
         } else {
-            füüsika.setLinearVelocity(0, füüsika.getVelocityY()); //TODO: Võiks säilitada X kiiruse
+            füüsika.setLinearVelocity(0, füüsika.getVelocityY());
         }
     }
 

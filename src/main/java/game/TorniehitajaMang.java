@@ -138,7 +138,7 @@ public class TorniehitajaMang extends GameApplication {
 
     private void endGame() {
         Kasutaja parimKasutaja = leiaParimKasutaja();
-        getDialogService().showInputBox("Hetkel on parim skoor kasutajal " + parimKasutaja.getNimi() + " - (" + parimKasutaja.getSkoor() + ") \nSinu skoor oli: " + skoor + "\nSisesta nimi: ", (nimi) -> {
+        getDialogService().showInputBox("Hetkel on parim skoor kasutajal " + parimKasutaja.getNimi() + " (" + parimKasutaja.getSkoor() + ") \nSinu skoor oli: " + skoor + "\nSisesta nimi: ", (nimi) -> {
             salvestaSkoor(nimi, skoor);
 
             getGameController().startNewGame();

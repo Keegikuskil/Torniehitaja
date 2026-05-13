@@ -9,6 +9,7 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 
 
 import java.util.Random;
@@ -21,6 +22,7 @@ public class TorniehitajaMang extends GameApplication {
     private double targetKaameraY = 0;
     private int skoor = 0;
     private Entity eelmineKorrus;
+    private Entity kukkuvKorrus;
 
     @Override
     protected void initSettings(GameSettings seaded) {
@@ -32,16 +34,20 @@ public class TorniehitajaMang extends GameApplication {
         seaded.setScaleAffectedOnResize(true);
         seaded.setVersion("0.1");
         seaded.setDeveloperMenuEnabled(true);
-
     }
 
     @Override
     protected void initGame() {
+        korrusteArv = 0;
+        skoor = 0;
+        targetKaameraY = 0;
+        kukkuvKorrus = null;
+        praeguneKorrus = null;
+        eelmineKorrus = null;
         getGameWorld().addEntityFactory(new AsjadeTehas());
+        getGameScene().setBackgroundColor(Color.LIGHTBLUE);
         getGameScene().getViewport().setY(-300);
         getGameScene().getViewport().setLazy(true);
-
-        //getGameScene().getViewport().setX(0);
         teeMaa();
         teeKorrus();
     }
@@ -58,7 +64,8 @@ public class TorniehitajaMang extends GameApplication {
         return new UserAction(nimi) {
             protected void onActionBegin() {
                 if (praeguneKorrus != null) {
-                    praeguneKorrus.getComponent(KorruseKomponent.class).kukuta();
+                    kukkuvKorrus = praeguneKorrus;
+                    kukkuvKorrus.getComponent(KorruseKomponent.class).kukuta();
                     praeguneKorrus = null;
                     getGameTimer().runOnceAfter(() -> {
                         teeKorrus();
@@ -73,26 +80,25 @@ public class TorniehitajaMang extends GameApplication {
     }
 
     private void teeKorrus()    {
-
-        //Random rdm = new Random();
-        //int juhuarv = rdm.nextInt(0, 450);
-
+        Random rdm = new Random();
+        int juhuarv = rdm.nextInt(0, 470);
         int maaY = 750;
         int korruseKõrgus = 150; 
         double korruseY = 50;
         int vahe = 250;
         eelmineKorrus = praeguneKorrus;
         if (korrusteArv < 3) {
-            praeguneKorrus = spawn("KORRUS", 470, korruseY);
+            praeguneKorrus = spawn("KORRUS", juhuarv, korruseY);
             targetKaameraY = 0;
         }
 
         if (korrusteArv >= 3) {
             korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus) - vahe;
-            praeguneKorrus = spawn("KORRUS", 470, korruseY);
+            praeguneKorrus = spawn("KORRUS", juhuarv, korruseY);
             targetKaameraY = korruseY - 50;
         }
         korrusteArv++;
+        skoor++;
     }
 
     @Override
@@ -103,15 +109,25 @@ public class TorniehitajaMang extends GameApplication {
 
         if (Math.abs(diff) > 1) {
             double smoothY = currentY + diff * 0.1;
-            getGameScene().getViewport().setY(smoothY);
+            getGameScene().getViewport().setY(Math.round(smoothY));
+        }
+
+        if (kukkuvKorrus != null) {
+            if (kukkuvKorrus.getY() > currentY + 650)   {
+                kukkuvKorrus = null;
+                endGame();
+            }
         }
     }
 
     private void teeMaa()   {
-        spawn("MAA", 0, 800 - 50);
+        spawn("MAA", -20, 800 - 40);
     }
 
     private void endGame() {
-        System.out.println("GAME OVER");
+        getDialogService().showMessageBox("Torn kukkus ümber! \n Skoor: " + (skoor - 1), () -> {
+            getGameController().startNewGame();
+        });
+
     }
 }

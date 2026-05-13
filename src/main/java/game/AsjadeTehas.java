@@ -16,8 +16,8 @@ public class AsjadeTehas implements EntityFactory {
         PhysicsComponent füüsika = new PhysicsComponent();
         füüsika.setBodyType(BodyType.DYNAMIC);
         FixtureDef fd = new FixtureDef();
-        fd.setDensity(1.3f);
-        fd.setFriction(0.1f);
+        fd.setDensity(2f);
+        fd.setFriction(0.3f);
         füüsika.setFixtureDef(fd);
         return FXGL.entityBuilder(info)
                 .type(EntityType.KORRUS)
@@ -35,7 +35,7 @@ public class AsjadeTehas implements EntityFactory {
         füüsika.setBodyType(BodyType.STATIC);
         return FXGL.entityBuilder(info)
                 .type(EntityType.MAA)
-                .viewWithBBox(new Rectangle(620, 50, Color.DARKRED))
+                .viewWithBBox(new Rectangle(650, 50, Color.GREY))
                 .with(füüsika)
                 .collidable()
                 .build();

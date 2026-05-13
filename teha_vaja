@@ -3,3 +3,5 @@ Esimesed kolm korrust on katki, mäng ei vaata kuhu nad kukuvad
 Külje must osa ei lähe muutes alla välja hetkel miskipärast
 Vahepeal saab panna 2 korrust üksteise kõrvale ja mäng ei saa sellest aru hetkel
 Erindihaldus korda teha
+
+!!!!!! ./gradlew clean run ainus viis selle jooksutamiseks miskipärast

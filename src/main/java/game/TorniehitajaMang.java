@@ -54,6 +54,14 @@ public class TorniehitajaMang extends GameApplication {
         getGameScene().getViewport().setLazy(true);
         teeMaa();
         teeKorrus();
+
+        getGameTimer().runOnceAfter(()   -> {
+            getDialogService().showMessageBox(
+                    "Kuidas mängida:\n" +
+                            "1. Vajuta tühikut või hiireklõpsu, et korrus alla kukutada.\n" +
+                            "2. Ehita nii kõrge torn kui suudad!"
+            );
+        }, javafx.util.Duration.seconds(0.5));
     }
 
     @Override

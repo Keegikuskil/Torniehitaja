@@ -2,6 +2,8 @@ package game;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.*;
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
@@ -21,7 +23,11 @@ public class AsjadeTehas implements EntityFactory {
         füüsika.setFixtureDef(fd);
         return FXGL.entityBuilder(info)
                 .type(EntityType.KORRUS)
-                .viewWithBBox(new Rectangle(150, 150, Color.BLUE))
+                .viewWithBBox(FXGL.texture("korrus.png", 150, 150))
+                //.view(FXGL.texture("korrus.png", 150, 150))
+                //.bbox(new HitBox(BoundingShape.box(150,150)))
+                //.viewWithBBox("korrus.png")
+                //.viewWithBBox(new Rectangle(150, 150, Color.BLUE))
                 .with(füüsika)
                 .with(new KorruseKomponent())
                 .collidable()

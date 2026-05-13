@@ -12,6 +12,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
@@ -125,9 +129,54 @@ public class TorniehitajaMang extends GameApplication {
     }
 
     private void endGame() {
-        getDialogService().showMessageBox("Torn kukkus ümber! \n Skoor: " + (skoor - 1), () -> {
+        Kasutaja parimKasutaja = leiaParimKasutaja();
+        getDialogService().showInputBox("Hetkel on parim skoor kasutajal " + parimKasutaja.getNimi() + " - (" + parimKasutaja.getSkoor() + ") \nSinu skoor oli: " + skoor + "\nSisesta nimi: ", (nimi) -> {
+            salvestaSkoor(nimi, skoor);
+
             getGameController().startNewGame();
         });
 
+    }
+    private static void salvestaSkoor(String mängija, int skoor)  {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("skoorid.dat", true)))   {
+            dos.writeUTF(mängija);
+            dos.writeInt(skoor);
+        } catch (IOException e) {
+            System.err.println("Viga skoori salvestamisel: " + e.getMessage());
+        }
+    }
+
+    private static Kasutaja leiaParimKasutaja() {
+        File fail = new File("skoorid.dat");
+        boolean onOlemas = fail.exists();
+
+        if (onOlemas)   {
+            List<Kasutaja> kasutajad = new ArrayList<>();
+            try (DataInputStream dis = new DataInputStream(new FileInputStream("skoorid.dat"))) {
+                while (dis.available() > 0)  {
+                    String nimi = dis.readUTF();
+                    int skoor = dis.readInt();
+                    Kasutaja kasutaja = new Kasutaja(nimi, skoor);
+                    kasutajad.add(kasutaja);
+                }
+            } catch (IOException e) {
+                System.err.println("Viga skooride lugemisel: " + e.getMessage());
+            }
+
+            Kasutaja parimKasutaja = null;
+            int parimSkoor = 0;
+
+            for (Kasutaja kasutaja : kasutajad)  {
+                if (kasutaja.getSkoor() > parimSkoor)   {
+                    parimSkoor = kasutaja.getSkoor();
+                    parimKasutaja = kasutaja;
+                }
+            }
+
+            return parimKasutaja;
+
+        } else {
+            return new Kasutaja("PUUDUB", 0);
+        }
     }
 }

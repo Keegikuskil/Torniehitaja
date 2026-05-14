@@ -50,8 +50,9 @@ public class TorniehitajaMang extends GameApplication {
         kukkuvKorrus = null;
         praeguneKorrus = null;
         eelmineKorrus = null;
-        getGameWorld().addEntityFactory(new AsjadeTehas());
         getGameScene().setBackgroundColor(Color.LIGHTBLUE);
+        getGameScene().setBackgroundRepeat("taust.png");
+        getGameWorld().addEntityFactory(new AsjadeTehas());
         getGameScene().getViewport().setY(-300);
         getGameScene().getViewport().setLazy(true);
         teeMaa();

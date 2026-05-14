@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import javafx.scene.input.KeyCode;
@@ -31,7 +32,7 @@ public class TorniehitajaMang extends GameApplication {
     @Override
     protected void initSettings(GameSettings seaded) {
         seaded.setTitle("Torniehitaja");
-        seaded.setHeight(800);
+        seaded.setHeight(810);
         seaded.setWidth(620);
         seaded.setManualResizeEnabled(true);
         seaded.setPreserveResizeRatio(true);
@@ -42,6 +43,7 @@ public class TorniehitajaMang extends GameApplication {
 
     @Override
     protected void initGame() {
+        FXGL.getAudioPlayer().loopMusic(FXGL.getAssetLoader().loadMusic("soundtrack.wav"));
         korrusteArv = 0;
         skoor = 0;
         targetKaameraY = 0;
@@ -129,6 +131,20 @@ public class TorniehitajaMang extends GameApplication {
                 endGame();
             }
         }
+    }
+
+    @Override
+    protected void initPhysics()    {
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.KORRUS, EntityType.MAA) {
+            protected void onCollisionBegin(Entity korrus, Entity maa)  {
+                FXGL.getAudioPlayer().playSound(FXGL.getAssetLoader().loadSound("pauk.wav"));
+            }
+        });
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.KORRUS, EntityType.KORRUS) {
+            protected void onCollisionBegin(Entity korrus1, Entity korrus2)  {
+                FXGL.getAudioPlayer().playSound(FXGL.getAssetLoader().loadSound("pauk.wav"));
+            }
+        });
     }
 
     private void teeMaa()   {

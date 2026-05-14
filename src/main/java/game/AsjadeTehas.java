@@ -1,12 +1,12 @@
 package game;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.EntityFactory;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.*;
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -17,9 +17,17 @@ public class AsjadeTehas implements EntityFactory {
     public Entity uusKorrus(SpawnData info) {
         PhysicsComponent füüsika = new PhysicsComponent();
         füüsika.setBodyType(BodyType.DYNAMIC);
+        FixtureDef fd = new FixtureDef();
+        fd.setDensity(2f);
+        fd.setFriction(0.3f);
+        füüsika.setFixtureDef(fd);
         return FXGL.entityBuilder(info)
                 .type(EntityType.KORRUS)
-                .viewWithBBox(new Rectangle(150, 150, Color.BLUE))
+                .viewWithBBox(FXGL.texture("korrus.png", 150, 150))
+                //.view(FXGL.texture("korrus.png", 150, 150))
+                //.bbox(new HitBox(BoundingShape.box(150,150)))
+                //.viewWithBBox("korrus.png")
+                //.viewWithBBox(new Rectangle(150, 150, Color.BLUE))
                 .with(füüsika)
                 .with(new KorruseKomponent())
                 .collidable()
@@ -33,10 +41,12 @@ public class AsjadeTehas implements EntityFactory {
         füüsika.setBodyType(BodyType.STATIC);
         return FXGL.entityBuilder(info)
                 .type(EntityType.MAA)
-                .viewWithBBox(new Rectangle(620, 50, Color.DARKRED))
+                .viewWithBBox(new Rectangle(650, 50, Color.GREY))
                 .with(füüsika)
                 .collidable()
                 .build();
     }
+
+
 
 }

@@ -1,11 +1,9 @@
 plugins {
     java
     application
-    id("org.javamodularity.moduleplugin") version "1.8.15"
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("org.beryx.jlink") version "2.25.0"
 }
-
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
@@ -26,7 +24,6 @@ tasks.withType<JavaCompile> {
 }
 
 application {
-    mainModule.set("org.example.torniehitaja")
     mainClass.set("game.TorniehitajaMang")
 }
 
@@ -51,4 +48,11 @@ jlink {
     launcher {
         name = "app"
     }
+}
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

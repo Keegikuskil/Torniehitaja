@@ -54,7 +54,6 @@ public class TorniehitajaMang extends GameApplication {
         getGameScene().getViewport().setLazy(true);
         teeMaa();
         teeKorrus();
-
         getGameTimer().runOnceAfter(()   -> {
             getDialogService().showMessageBox(
                     "Kuidas mängida:\n" +

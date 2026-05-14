@@ -38,7 +38,7 @@ public class KorruseKomponent extends Component {
 
     public void kukuta()    {
         PhysicsComponent füüsika = entity.getComponent(PhysicsComponent.class);
-        füüsika.getBody().setGravityScale(2f);
+        füüsika.getBody().setGravityScale(3f);
         füüsika.getBody().setAwake(true);
     }
 }

@@ -50,7 +50,7 @@ public class TorniehitajaMang extends GameApplication {
         eelmineKorrus = null;
         getGameWorld().addEntityFactory(new AsjadeTehas());
         getGameScene().setBackgroundColor(Color.LIGHTBLUE);
-        getGameScene().getViewport().setY(-300);
+        getGameScene().getViewport().setY(0);
         getGameScene().getViewport().setLazy(true);
         teeMaa();
         teeKorrus();

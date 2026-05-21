@@ -23,7 +23,7 @@ public class KorruseKomponent extends Component {
         if (füüsika.getBody().getGravityScale() == 0f) {
 
             füüsika.setLinearVelocity(kiirus * suund, 0);
-            if (entity.getX() >= 620 - 50) {
+            if (entity.getX() >= 620 - 150) {
                 suund = -1;
             } else if (entity.getX() <= 0){
                 suund = 1;

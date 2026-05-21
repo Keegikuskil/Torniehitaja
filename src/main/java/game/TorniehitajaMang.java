@@ -4,20 +4,21 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
+import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
-import static game.EntityType.KORRUS;
-import static game.EntityType.MAA;
 
 public class TorniehitajaMang extends GameApplication {
     private Entity praeguneKorrus;
@@ -25,7 +26,7 @@ public class TorniehitajaMang extends GameApplication {
     private double targetKaameraY = 0;
     private int skoor = 0;
     private Entity eelmineKorrus;
-    private boolean mängLäbi = false;
+    private Entity kukkuvKorrus;
 
     @Override
     protected void initSettings(GameSettings seaded) {
@@ -37,156 +38,153 @@ public class TorniehitajaMang extends GameApplication {
         seaded.setScaleAffectedOnResize(true);
         seaded.setVersion("0.1");
         seaded.setDeveloperMenuEnabled(true);
-
     }
 
     @Override
     protected void initGame() {
+        korrusteArv = 0;
+        skoor = 0;
+        targetKaameraY = 0;
+        kukkuvKorrus = null;
+        praeguneKorrus = null;
+        eelmineKorrus = null;
         getGameWorld().addEntityFactory(new AsjadeTehas());
-        getGameScene().getViewport().setY(0);
+        getGameScene().setBackgroundColor(Color.LIGHTBLUE);
+        getGameScene().getViewport().setY(-300);
         getGameScene().getViewport().setLazy(true);
-
-        //getGameScene().getViewport().setX(0);
         teeMaa();
         teeKorrus();
-    }
 
-    @Override
-    protected void initPhysics() {
-        //Entity kukkuv = praeguneKorrus;
-        //Entity paigal = eelmineKorrus;
-        onCollisionBegin(KORRUS, KORRUS, (a, b) -> {
-            if (!(mängLäbi)) {
-                Entity kukkuv = (a == praeguneKorrus) ? a : b;
-                PhysicsComponent physics = kukkuv.getComponent(PhysicsComponent.class);
-                physics.setVelocityX(0);
-                physics.setVelocityY(0);
-                physics.setLinearVelocity(0,0);
-                physics.setAngularVelocity(0);
-                physics.setBodyType(BodyType.STATIC);
-
-                //Entity paigal = (a == eelmineKorrus) ? a : b;
-                //paigal.getComponent(CollidableComponent.class).setValue(false);
-                teeKorrus();
-                return null;
-            }
-            else {
-                return null;
-            }
-        });
-
-        if (korrusteArv == 1) {
-            onCollisionBegin(KORRUS, MAA, (a, b) -> {
-                teeKorrus();
-                return null;
-            });
-        }
-        else if (korrusteArv>1) {
-            onCollisionBegin(KORRUS, MAA, (kukkuv, b) -> {
-                mängLäbi = true;
-                //getInput().setProcessInput(false);
-                return null;
-            });
-        }
+        getGameTimer().runOnceAfter(()   -> {
+            getDialogService().showMessageBox(
+                    "Kuidas mängida:\n" +
+                            "1. Vajuta tühikut või hiireklõpsu, et korrus alla kukutada.\n" +
+                            "2. Ehita nii kõrge torn kui suudad!"
+            );
+        }, javafx.util.Duration.seconds(0.5));
     }
 
     @Override
     protected void initInput() {
-        getInput().addAction(new UserAction("kukuta") {
-            @Override
+        getInput().addAction(teeKukutamiseNupp("kukuta_space"), KeyCode.SPACE);
+        getInput().addAction(teeKukutamiseNupp("kukuta_s"), KeyCode.S);
+        getInput().addAction(teeKukutamiseNupp("kukuta_alla"), KeyCode.DOWN);
+        getInput().addAction(teeKukutamiseNupp("kukuta_hiir"), MouseButton.PRIMARY);
+    }
+
+    private UserAction teeKukutamiseNupp(String nimi) {
+        return new UserAction(nimi) {
             protected void onActionBegin() {
                 if (praeguneKorrus != null) {
-                    praeguneKorrus.getComponent(KorruseKomponent.class).kukuta();
+                    kukkuvKorrus = praeguneKorrus;
+                    kukkuvKorrus.getComponent(KorruseKomponent.class).kukuta();
                     praeguneKorrus = null;
-                    /*AtomicBoolean kokkupõrge = new AtomicBoolean(false);
-                    //if collision start on, kuid pole collisionEnds(), ss tuleb uus kast
-                    onCollisionBegin(KORRUS, KORRUS, (praeguneK, eelmineK) -> {
-                        kokkupõrge.set(true);
-                        return null;
-                    });
-                    onCollisionBegin(KORRUS, MAA, (praeguneK, maa) -> {
-                        kokkupõrge.set(true);
-                        return null;
-                    });
-                    if (kokkupõrge.get()) {
-                        boolean kukkusMööda = false;
-                        onCollisionEnd(KORRUS, KORRUS, (praeguneKorrus, eelmineKorrus) -> {
-                            Text lõpusõnum = new Text("Mäng läbi!");
-                            lõpusõnum.setTranslateX(300);
-                            lõpusõnum.setTranslateY(200);
-                            getGameScene().addUINode(lõpusõnum);
-                            return null;
-                        });
-                        getGameTimer().runOnceAfter(() -> {
-                            if (!(kukkusMööda)) {
-                                teeKorrus();
-                            }
-                        },javafx.util.Duration.seconds(0.8));
-                    };*/
+                    getGameTimer().runOnceAfter(() -> {
+                        teeKorrus();
+                    },javafx.util.Duration.seconds(0.8));
                 }
             }
-        }, KeyCode.SPACE);
-    }
+        };
+        }
 
     public static void main(String[] args)  {
         launch(args);
     }
 
     private void teeKorrus()    {
-        // praeguneKorrus = spawn("KORRUS", 235, 100);
-        //TODO: KAAMERA võiks liikuda kaasa alates mingist punktist
-
-
+        Random rdm = new Random();
+        int juhuarv = rdm.nextInt(0, 470);
         int maaY = 750;
-        int korruseKõrgus = 50;
+        int korruseKõrgus = 150; 
         double korruseY = 50;
-        // double targetKaameraY = 0;
-        double kaameraY = 0;
-        int vahe = 550;
+        int vahe = 250;
         eelmineKorrus = praeguneKorrus;
         if (korrusteArv < 3) {
-            korruseY = 50;
-            praeguneKorrus = spawn("KORRUS", 235, korruseY);
+            praeguneKorrus = spawn("KORRUS", juhuarv, korruseY);
             targetKaameraY = 0;
-            // getGameScene().getViewport().setY(kaameraY);
         }
-        // int korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus);
-
-        // praeguneKorrus = spawn("KORRUS", 235, korruseY);
-
-        // double kaameraY = korruseY;
-        // korrusteArv++;
 
         if (korrusteArv >= 3) {
             korruseY = maaY - korruseKõrgus - (korrusteArv * korruseKõrgus) - vahe;
-            praeguneKorrus = spawn("KORRUS", 235, korruseY);
-            double vaheY = kaameraY - korruseY + 50;
+            praeguneKorrus = spawn("KORRUS", juhuarv, korruseY);
             targetKaameraY = korruseY - 50;
-            // getGameScene().getViewport().setY(kaameraY);
-            // getGameScene().getViewport().setY(kaameraY);
         }
         korrusteArv++;
+        skoor++;
     }
 
     @Override
     protected void onUpdate(double tpf) {
 
         double currentY = getGameScene().getViewport().getY();
-
-        // only moves if needed
         double diff = targetKaameraY - currentY;
 
         if (Math.abs(diff) > 1) {
             double smoothY = currentY + diff * 0.1;
-            getGameScene().getViewport().setY(smoothY);
+            getGameScene().getViewport().setY(Math.round(smoothY));
+        }
+
+        if (kukkuvKorrus != null) {
+            if (kukkuvKorrus.getY() > currentY + 650)   {
+                kukkuvKorrus = null;
+                endGame();
+            }
         }
     }
 
     private void teeMaa()   {
-        spawn("MAA", 0, 800 - 50);
+        spawn("MAA", -20, 800 - 40);
     }
 
     private void endGame() {
-        System.out.println("GAME OVER");
+        Kasutaja parimKasutaja = leiaParimKasutaja();
+        getDialogService().showInputBox("Hetkel on parim skoor kasutajal " + parimKasutaja.getNimi() + " (" + parimKasutaja.getSkoor() + ") \nSinu skoor oli: " + skoor + "\nSisesta nimi: ", (nimi) -> {
+            salvestaSkoor(nimi, skoor);
+
+            getGameController().startNewGame();
+        });
+
+    }
+    private static void salvestaSkoor(String mängija, int skoor)  {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("skoorid.dat", true)))   {
+            dos.writeUTF(mängija);
+            dos.writeInt(skoor);
+        } catch (IOException e) {
+            System.err.println("Viga skoori salvestamisel: " + e.getMessage());
+        }
+    }
+
+    private static Kasutaja leiaParimKasutaja() {
+        File fail = new File("skoorid.dat");
+        boolean onOlemas = fail.exists();
+
+        if (onOlemas)   {
+            List<Kasutaja> kasutajad = new ArrayList<>();
+            try (DataInputStream dis = new DataInputStream(new FileInputStream("skoorid.dat"))) {
+                while (dis.available() > 0)  {
+                    String nimi = dis.readUTF();
+                    int skoor = dis.readInt();
+                    Kasutaja kasutaja = new Kasutaja(nimi, skoor);
+                    kasutajad.add(kasutaja);
+                }
+            } catch (IOException e) {
+                System.err.println("Viga skooride lugemisel: " + e.getMessage());
+            }
+
+            Kasutaja parimKasutaja = null;
+            int parimSkoor = 0;
+
+            for (Kasutaja kasutaja : kasutajad)  {
+                if (kasutaja.getSkoor() > parimSkoor)   {
+                    parimSkoor = kasutaja.getSkoor();
+                    parimKasutaja = kasutaja;
+                }
+            }
+
+            return parimKasutaja;
+
+        } else {
+            return new Kasutaja("PUUDUB", 0);
+        }
     }
 }
